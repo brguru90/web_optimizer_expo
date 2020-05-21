@@ -6,7 +6,10 @@ import Sidebar from "../Sidebar/Sidebar.jsx";
 import menu from "../Menu/Menu.jsx";
 import axios from 'axios'
 import fetchStream from 'fetch-readablestream';
-import RNFetchBlob from 'rn-fetch-blob'
+// import RNFetchBlob from 'rn-fetch-blob'
+
+
+// var RNFetchBlob = require('rn-fetch-blob');
 
 var querystring = require('querystring');
 var jsonQuery = require('json-query')
@@ -121,19 +124,39 @@ export default class Dashboard extends React.Component {
             // )
             console.log("I got all other data,this is the Time to check server load")
             // this.get_data("/api/load_balancing/", { url: url }).then(data => this.setState({ api_server_load_info: data }))
-           const response= await fetch(ctx.server2 + '/api/load_balancing/', {
-               method: 'POST',
-               headers: {
-                  "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
-                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-                  'Transfer-Encoding' : 'Chunked'
-               },
-               body: querystring.stringify({ url: url, test_mode: test_mode })
-            })
-               .then((resp) => {
-                  console.log("@@@@@@@@@@@@ ------- ", resp.status, resp.statusText,  Object.keys(resp),Object.keys(resp._bodyBlob))
-                  console.log(JSON.stringify(resp))
-               })
+
+            // const Api = axios.create({
+            //    baseURL: `${URL}`,
+            //    withCredentials: true,
+            //  });
+
+            // Api({
+            //    method: 'POST',
+            //    url:ctx.server2 + '/api/load_balancing/',
+            //    headers: {
+            //       "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+            //       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            //       'Transfer-Encoding' : 'Chunked'
+            //    },
+            //    responseType: 'stream',
+            //    body: querystring.stringify({ url: url, test_mode: test_mode })
+            //  })
+            //    .then(function (response) {
+            //     console.log(" response.data", response.data)
+            //    });
+            //   const response= await fetch(ctx.server2 + '/api/load_balancing/', {
+            // method: 'POST',
+            // headers: {
+            //    "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+            //    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+            //    'Transfer-Encoding' : 'Chunked'
+            // },
+            // body: querystring.stringify({ url: url, test_mode: test_mode })
+            //    })
+            //       .then((resp) => {
+            //          console.log("@@@@@@@@@@@@ ------- ", resp.status, resp.statusText,  Object.keys(resp),Object.keys(resp._bodyBlob))
+            //          console.log(JSON.stringify(resp))
+            //       })
             // .catch(function (error) {
             //    console.log(error);
             //    ctx.count++
@@ -162,29 +185,29 @@ export default class Dashboard extends React.Component {
             //          console.log("done", url, data)
             //          ctx.count++
             //          //to make sure the server is up
-            //          ctx.interval4 = setInterval(() => {
-            //             axios({
-            //                method: 'post',
-            //                url: ctx.server + '/api/url_check/',
-            //                headers: {
-            //                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-            //                },
-            //                data: querystring.stringify({
-            //                   url: url,
-            //                   test_mode: test_mode
-            //                }),
-            //             })
-            //                .then(function (response) {
-            //                   console.log("response", response.data);
-            //                   if (response.data.valid == "valid") {
-            //                      ctx.setSyncState({ load_balance_status: true })
-            //                      clearInterval(ctx.interval4)
-            //                   }
-            //                   else
-            //                      console.log("waiting for server to up")
+            // ctx.interval4 = setInterval(() => {
+            //    axios({
+            //       method: 'post',
+            //       url: ctx.server + '/api/url_check/',
+            //       headers: {
+            //          'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            //       },
+            //       data: querystring.stringify({
+            //          url: url,
+            //          test_mode: test_mode
+            //       }),
+            //    })
+            //       .then(function (response) {
+            //          console.log("response", response.data);
+            //          if (response.data.valid == "valid") {
+            //             ctx.setSyncState({ load_balance_status: true })
+            //             clearInterval(ctx.interval4)
+            //          }
+            //          else
+            //             console.log("waiting for server to up")
 
-            //                })
-            //          }, 500);
+            //       })
+            // }, 500);
 
             //          break;
             //       }
@@ -204,16 +227,16 @@ export default class Dashboard extends React.Component {
             // })
 
 
-            console.log("-------------------------------response2", response)
-            console.log("-------------------------------response2.body", response.body)
+            // console.log("-------------------------------response2", response)
+            // console.log("-------------------------------response2.body", response.body)
 
             // fetchStream(ctx.server2 + '/api/load_balancing/',{
-            //    method: 'POST',
-            //    headers: {
-            //       "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
-            //       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-            //    },
-            //    body: querystring.stringify({ url: url, test_mode: test_mode })
+            // method: 'POST',
+            // headers: {
+            //    "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+            //    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            // },
+            // body: querystring.stringify({ url: url, test_mode: test_mode })
             // })
             //    .then(response => {
             //       console.log("-------------")
@@ -244,6 +267,70 @@ export default class Dashboard extends React.Component {
             //    return pump();
             // }
 
+
+            let input = {
+               method: 'POST',
+               url: ctx.server2 + '/api/load_balancing/',
+               headers: {
+                  "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+               },
+               body: { url: url, test_mode: test_mode }
+            }
+
+
+            this.Stream(input, (cur_data) => {
+               let temp_arr = []
+               let temp_data = cur_data.split("\n").map(data => data.replace("data:", ""))
+               for (let i in temp_data)
+                  try {
+                     temp_arr.push(JSON.parse(temp_data[i]))
+                  } catch (error) {
+
+                  }
+               data = data.concat(temp_arr)
+               // console.log("data", data)
+               this.setState({ api_server_load_info: data })
+            },
+               (cur_data) => {
+                  console.log("------------done", url, data.length)
+                  ctx.count++
+                  ctx.interval4 = setInterval(() => {
+                     axios({
+                        method: 'post',
+                        url: ctx.server + '/api/url_check/',
+                        headers: {
+                           'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                        },
+                        data: querystring.stringify({
+                           url: url,
+                           test_mode: test_mode
+                        }),
+                     })
+                        .then(function (response) {
+                           console.log("response", response.data);
+                           if (response.data.valid == "valid") {
+                              ctx.setState({ load_balance_status: true })
+                              clearInterval(ctx.interval4)
+                           }
+                           else
+                              console.log("waiting for server to up")
+
+                        })
+                  }, 500);
+               }
+            )
+
+
+
+
+
+
+
+
+
+
+
          }
 
       }, 1000)
@@ -273,13 +360,74 @@ export default class Dashboard extends React.Component {
             }
          }
          this.setState({ loaded: this.loaded_apis })
-         if (this.loaded_apis.length > 10)
+         if (this.loaded_apis.length > 12)
             clearInterval(temp_interval)
 
       }, 500);
 
 
 
+   }
+
+
+   Stream = (input, updateCallback, done) => {
+      //last response length
+      var last_response_len = 0;
+      //Create XHR object
+      var xhttp = new XMLHttpRequest();
+      //Add eventlistener
+      xhttp.onprogress = function () {
+         //Get new part of response
+         var responseText = xhttp.response.substr(last_response_len);
+         //Set new response position
+         last_response_len = xhttp.response.length;
+
+         updateCallback(responseText)
+         //Split into individual events, using a safe seperator which won't naturally occur in your events
+         // responseText.split("▼")
+         //    //Only keep non-empty events to prevent JSON.parse error
+         //    .filter(function (l) { return l.length > 0; })
+         //    //Loop through events
+         //    .forEach(function (text) {
+         //       //Parse JSON to functional objects
+         //       var data = JSON.parse(text);
+         //       //Do something with each data element
+         //       for (var key in data) {
+         //          //Ignore potential prototype keys
+         //          if (data.hasOwnProperty(key)) {
+         //             //Do event handling of some sort
+         //             updateCallback(data[key], key);
+         //          }
+         //       }
+         //    });
+      };
+
+      xhttp.onreadystatechange = function (aEvt) {
+         if (xhttp.readyState == 4 && xhttp.status == 200) {
+            done(xhttp.responseText)
+            //run any callback here
+         }
+      };
+
+
+      //Initialize request
+      xhttp.open(input.method, input.url, true);
+      if (input.headers) {
+         for (let key in input.headers)
+            xhttp.setRequestHeader(key, input.headers[key]);
+      }
+      if (input.body) {
+         xhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+         let params = []
+         for (let key in input.body)
+            params.push(`${key}=${input.body[key]}`)
+         xhttp.send(params.join("&"));
+      }
+      else
+         xhttp.send();
+
+
+      //Send Request
    }
 
    componentWillUnmount() {
