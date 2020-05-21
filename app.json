@@ -23,6 +23,11 @@
     ],
     "ios": {
       "supportsTablet": true
+     
+    },
+    "android": {
+      "package": "com.terralogic.web_optimizer",
+      "versionCode": 1
     }
   }
 }
