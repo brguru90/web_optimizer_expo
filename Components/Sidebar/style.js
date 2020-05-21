@@ -1,8 +1,10 @@
 import React from 'react';
 import {
-    Animated
+    Animated,
+    Dimensions
 } from 'react-native';
 
+const width = Dimensions.get("window").width;
 
 export default {
  
@@ -35,9 +37,10 @@ export default {
     },
     sidebar: {
         position: "absolute",
-        left: 0,
+        right: width,
         top: 0,
         zIndex:100,
+        width:"80%",
         height:"100%",
         backgroundColor:"pink",
     },
@@ -45,7 +48,7 @@ export default {
         backgroundColor:"violet",
         flex: 1,
         zIndex:101,
-        // width:"80%",
+        width:"100%",
     },    
     body: {
         backgroundColor:"yellow",

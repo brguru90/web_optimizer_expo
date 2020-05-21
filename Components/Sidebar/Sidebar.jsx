@@ -27,36 +27,36 @@ export default class Sidebar extends React.Component {
             console.log("Parent move", gesture.moveX)
             if (gesture.x0 <80) {
                 console.log(gesture);
-                if (gesture.moveX <= this.width * 0.7) {
+                if (gesture.moveX <= this.width * 0.8) {
                     console.log("Parent slidingup");
-                    this.animate([this.state.styles.sidebar.width], [gesture.moveX], 0)
+                    this.animate([this.state.styles.sidebar.right], [this.width-gesture.moveX], 0)
                 }
             }
 
-            // if (gesture.x0 >= this.width * 0.7 && Number(JSON.stringify(this.state.styles.sidebar.width)) > 0) {
+            // if (gesture.x0 >= this.width * 0.7 && Number(JSON.stringify(this.state.styles.sidebar.right)) > 0) {
             //    if (gesture.moveX <= this.width * 0.7) {
             //       console.log("slidingdown");
-            //       this.animate([this.state.styles.sidebar.width], [gesture.moveX], 0)
+            //       this.animate([this.state.styles.sidebar.right], [gesture.moveX], 0)
             //    }
             // }
 
         },
         onPanResponderStart: () => console.log("Parent pan start"),
         onPanResponderRelease: (event, gesture) => {
-            console.log("Parent on release");
-            if (Number(JSON.stringify(this.state.styles.sidebar.width)) > this.width * 0.3 && gesture.dx > 0) {
+            console.log("Parent on release",this.width * 0.8,this.state.styles.sidebar.right);
+            if (Number(JSON.stringify(this.state.styles.sidebar.right)) <= this.width * 0.8 && gesture.dx > 0) {
                 console.log("Parent slideup");
-                this.animate([this.state.styles.sidebar.width], [this.width * 0.7], 600)
+                this.animate([this.state.styles.sidebar.right], [this.width*0.2], 600)
                 this.setState({ sidebar_state: true })
 
             }
-            else if ((Number(JSON.stringify(this.state.styles.sidebar.width))) <= this.width * 0.3) {
-                console.log("Parent slidedown", gesture.dx);
-                this.animate([this.state.styles.sidebar.width], [0], 400)
+            else if ((Number(JSON.stringify(this.state.styles.sidebar.right))) > this.width * 0.8) {
+                console.log("Parent slidedown", gesture.dx,this.width);
+                this.animate([this.state.styles.sidebar.right], [this.width], 400)
                 this.setState({ sidebar_state: false })
             }
             // else if(gesture.dx<0){
-            //    this.animate([this.state.styles.sidebar.width], [this.width * 0.7], 600)
+            //    this.animate([this.state.styles.sidebar.right], [this.width * 0.7], 600)
             // }
 
 
@@ -82,33 +82,34 @@ export default class Sidebar extends React.Component {
             //     console.log(gesture);
             //     if (gesture.moveX <= this.width * 0.7) {
             //         console.log("slidingup");
-            //         this.animate([this.state.styles.sidebar.width], [gesture.moveX], 0)
+            //         this.animate([this.state.styles.sidebar.right], [gesture.moveX], 0)
             //     }
             // }
 
-            if (Number(JSON.stringify(this.state.styles.sidebar.width)) > 0) {
-                if (gesture.moveX <= this.width * 0.7) {
+            if (Number(JSON.stringify(this.state.styles.sidebar.right)) >= this.width*0.2) {
                     console.log("Child slidingdown");
-                    this.animate([this.state.styles.sidebar.width], [gesture.moveX], 0)
-                }
+                    this.animate([this.state.styles.sidebar.right], [this.width*0.2-gesture.dx], 0)
             }
 
         },
         onPanResponderStart: () => console.log("Child pan start"),
         onPanResponderRelease: (event, gesture) => {
-            console.log("Child on release");
-            if (Number(JSON.stringify(this.state.styles.sidebar.width)) > this.width * 0.3 && gesture.dx > 0) {
+            console.log("Child on release",this.width * 0.8,Number(JSON.stringify(this.state.styles.sidebar.right))/this.width,this.state.styles.sidebar.right);
+            if (Number(JSON.stringify(this.state.styles.sidebar.right)) <= this.width * 0.5 && gesture.dx > 0) {
                 console.log("slideup");
-                this.animate([this.state.styles.sidebar.width], [this.width * 0.7], 600)
+                this.animate([this.state.styles.sidebar.right], [this.width*0.2], 600)
+                this.setState({ sidebar_state: true })
             }
             else
-             if ((Number(JSON.stringify(this.state.styles.sidebar.width))) <= this.width * 0.3) {
+             if ((Number(JSON.stringify(this.state.styles.sidebar.right))) >= this.width * 0.5) {
                 console.log("slidedown", gesture.dx);
-                this.animate([this.state.styles.sidebar.width], [0], 400)
+                this.animate([this.state.styles.sidebar.right], [this.width], 400)
+                this.setState({ sidebar_state: false })
             }
             else
              if(gesture.dx<0){
-               this.animate([this.state.styles.sidebar.width], [this.width * 0.7], 600)
+               this.animate([this.state.styles.sidebar.right], [this.width * 0.2], 600)
+               this.setState({ sidebar_state: true })
             }
 
 
@@ -138,6 +139,7 @@ export default class Sidebar extends React.Component {
     componentDidMount() {
         console.log(Object.keys(this.state))
         console.log(this.width, this.height)
+        // console.log(this.props.menu)
 
         // setTimeout(() => {
         //    let style = this.state.styles
@@ -145,8 +147,12 @@ export default class Sidebar extends React.Component {
         //    this.setState({ styles: style })
         // }, 2000);
 
+        // let cur_style = this.state.styles
+        // cur_style.sidebar.width = new Animated.Value(0)
+        // this.setSyncState({ styles: cur_style })
+
         let cur_style = this.state.styles
-        cur_style.sidebar.width = new Animated.Value(0)
+        cur_style.sidebar.right = new Animated.Value(this.width)
         this.setSyncState({ styles: cur_style })
 
     }
@@ -170,7 +176,7 @@ export default class Sidebar extends React.Component {
 
     show_menu = () => {
         console.log("show menu")
-        this.animate([this.state.styles.sidebar.width], [0.7 * this.width], 1000)
+        this.animate([this.state.styles.sidebar.right], [this.width*0.2], 1000)
         this.setState({ sidebar_state: true })
 
     }
@@ -179,8 +185,8 @@ export default class Sidebar extends React.Component {
     hide_menu = () => {
         console.log("hide menu")
 
-        if (this.state.styles.sidebar.width){
-            this.animate([this.state.styles.sidebar.width], [0], 1000)
+        if (this.state.styles.sidebar.right){
+            this.animate([this.state.styles.sidebar.right], [this.width], 1000)
             this.setState({ sidebar_state: false })
         }
 
@@ -204,7 +210,7 @@ export default class Sidebar extends React.Component {
                     <Animated.View style={styles.sidebar} >
                         <View style={styles.sidebar_bg}  {...this.state.panResponder_sidebar.panHandlers} >
                             <TouchableOpacity style={styles.touchableContainer} activeOpacity={1}>
-                                {this.props.menu?this.props.menu:<Button onPress={() => Actions.home()} title="Home" />}
+                                {this.props.menu?<this.props.menu />:<Button onPress={() => Actions.home()} title="Home" />}
                             </TouchableOpacity>
                         </View>
 

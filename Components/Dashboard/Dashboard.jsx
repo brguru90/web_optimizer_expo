@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Animated, Dimensions, Easing, PanResponder } from 'react-native';
 import default_style from "./style.js"
-import logics from "../commonLogic.js"
 import Sidebar from "../Sidebar/Sidebar.jsx";
-
-import Icon from 'react-native-vector-icons/Ionicons';
+import menu from "../Menu/Menu.jsx";
 
 
 export default class Dashboard extends React.Component {
@@ -19,9 +17,8 @@ export default class Dashboard extends React.Component {
 
    render() {
       return (
-         <Sidebar>
+         <Sidebar menu={menu}>
             <StatusBar barStyle="dark-content" hidden={false} translucent={false} backgroundColor="red" />
-
             <Text>Open up App.js to start working on your app!</Text>
             <Text>{JSON.stringify(this.state.styles)}</Text>
          </Sidebar>
