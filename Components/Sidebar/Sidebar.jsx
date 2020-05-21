@@ -137,8 +137,7 @@ export default class Sidebar extends React.Component {
     setSyncState = (states) => { new Promise((resolve) => this.setState(states, resolve)) }
 
     componentDidMount() {
-        console.log(Object.keys(this.state))
-        console.log(this.width, this.height)
+        console.log(`w=${this.width}, h=${this.height}`)
         // console.log(this.props.menu)
 
         // setTimeout(() => {
@@ -201,7 +200,7 @@ export default class Sidebar extends React.Component {
 
         return (
             <View style={styles.container}  {...this.state.panResponder_parent.panHandlers} >
-                <TouchableOpacity style={styles.touchableContainer} onPress={this.hide_menu} activeOpacity={1} onPressIn={(e) => console.log("hi")} onPanResponderMove={(e) => console.log(e)} >
+                <TouchableOpacity style={styles.touchableContainer} onPress={this.hide_menu} activeOpacity={1} >
 
                     <View style={styles.menuBar}>
                         <Icon name="md-menu" style={styles.menuBtn} onPress={this.show_menu} />

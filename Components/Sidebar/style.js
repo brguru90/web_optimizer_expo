@@ -23,16 +23,16 @@ export default {
     menuBar: {
         width: "100%",
         height: 50,
-        backgroundColor:"blue",
+        backgroundColor:"#08196e",
         borderBottomStyle: "dotted",
         borderBottomColor: "gray",
         borderBottomWidth: 1,
     },
     menuBtn: {
         position: "absolute",
-        top: 10,
+        top: 5,
         left: 10,
-        color: "black",
+        color: "white",
         fontSize: 35,
     },
     sidebar: {
@@ -51,7 +51,7 @@ export default {
         width:"100%",
     },    
     body: {
-        backgroundColor:"yellow",
+        backgroundColor:"white",
         flex:1,
     }
 }
