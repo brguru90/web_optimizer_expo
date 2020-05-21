@@ -11,6 +11,7 @@
     "axios": "^0.19.2",
     "expo": "~37.0.3",
     "expo-secure-store": "^8.1.0",
+    "fetch-readablestream": "^0.2.0",
     "json-query": "^2.2.2",
     "querystring": "^0.2.0",
     "react": "~16.9.0",
@@ -30,7 +31,8 @@
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.3.9",
     "react-navigation-drawer": "^2.4.13",
-    "react-navigation-stack": "^2.5.1"
+    "react-navigation-stack": "^2.5.1",
+    "rn-fetch-blob": "^0.12.0"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",

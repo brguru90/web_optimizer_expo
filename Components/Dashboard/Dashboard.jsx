@@ -1,10 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View,Alert, StatusBar, TouchableOpacity, Animated, Dimensions, Easing, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, Alert, StatusBar, TouchableOpacity, Animated, Dimensions, Easing, PanResponder } from 'react-native';
 import default_style from "./style.js"
 import logics from "../commonLogic.js"
 import Sidebar from "../Sidebar/Sidebar.jsx";
 import menu from "../Menu/Menu.jsx";
 import axios from 'axios'
+import fetchStream from 'fetch-readablestream';
+import RNFetchBlob from 'rn-fetch-blob'
+
 var querystring = require('querystring');
 var jsonQuery = require('json-query')
 
@@ -116,80 +119,130 @@ export default class Dashboard extends React.Component {
             // Alert.alert(
             //    'start load balancing '+ctx.server2
             // )
-            console.log("I got all other data,this is the Time to check server load", this.state)
+            console.log("I got all other data,this is the Time to check server load")
             // this.get_data("/api/load_balancing/", { url: url }).then(data => this.setState({ api_server_load_info: data }))
-            fetch(ctx.server2 + '/api/load_balancing/', {
+           const response= await fetch(ctx.server2 + '/api/load_balancing/', {
                method: 'POST',
                headers: {
-                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+                  "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+                  'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+                  'Transfer-Encoding' : 'Chunked'
                },
                body: querystring.stringify({ url: url, test_mode: test_mode })
-            })      //  .then((resp) => console.log(resp))
-               .catch(function (error) {
-                  console.log(error);
-                  ctx.count++
-                  Alert.alert(
-                     "got error "
-                  )
+            })
+               .then((resp) => {
+                  console.log("@@@@@@@@@@@@ ------- ", resp.status, resp.statusText,  Object.keys(resp),Object.keys(resp._bodyBlob))
+                  console.log(JSON.stringify(resp))
                })
-               .then(async (response) => {
-                  Alert.alert(
-                     `got response ${ctx.server2 } ${test_mode}`
-                  )
+            // .catch(function (error) {
+            //    console.log(error);
+            //    ctx.count++
+            //    Alert.alert(
+            //       "got error "
+            //    )
+            // })
+            // .then(async (response) => {
+            //    console.log("@@@@@@@@@@@@ ------- ", resp.status, resp.statusText,  Object.keys(resp),Object.keys(resp._bodyBlob))
+            //       console.log(JSON.stringify(resp))
 
-                  // console.log("response.........",response)
+            //    Alert.alert(
+            //       `got response ${ctx.server2 } ${test_mode}`
+            //    )
 
-                  console.log("response.body", response.body)
-                 
+            //    // console.log("response.........",response)
+
+            //    console.log("response.body", response.body)
 
 
-                  const reader = response.body.getReader();
-                  while (true) {
-                     const { done, value } = await reader.read();
-                     if (done) {
-                        console.log("done", url, data)
-                        ctx.count++
-                        //to make sure the server is up
-                        ctx.interval4 = setInterval(() => {
-                           axios({
-                              method: 'post',
-                              url: ctx.server + '/api/url_check/',
-                              headers: {
-                                 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-                              },
-                              data: querystring.stringify({
-                                 url: url,
-                                 test_mode: test_mode
-                              }),
-                           })
-                              .then(function (response) {
-                                 console.log("response", response.data);
-                                 if (response.data.valid == "valid") {
-                                    ctx.setSyncState({ load_balance_status: true })
-                                    clearInterval(ctx.interval4)
-                                 }
-                                 else
-                                    console.log("waiting for server to up")
 
-                              })
-                        }, 500);
+            //    const reader = response.body.getReader();
+            //    while (true) {
+            //       const { done, value } = await reader.read();
+            //       if (done) {
+            //          console.log("done", url, data)
+            //          ctx.count++
+            //          //to make sure the server is up
+            //          ctx.interval4 = setInterval(() => {
+            //             axios({
+            //                method: 'post',
+            //                url: ctx.server + '/api/url_check/',
+            //                headers: {
+            //                   'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            //                },
+            //                data: querystring.stringify({
+            //                   url: url,
+            //                   test_mode: test_mode
+            //                }),
+            //             })
+            //                .then(function (response) {
+            //                   console.log("response", response.data);
+            //                   if (response.data.valid == "valid") {
+            //                      ctx.setSyncState({ load_balance_status: true })
+            //                      clearInterval(ctx.interval4)
+            //                   }
+            //                   else
+            //                      console.log("waiting for server to up")
 
-                        break;
-                     }
-                     let temp_arr = []
-                     let temp_data = new TextDecoder("utf-8").decode(value).split("\n").map(data => data.replace("data:", ""))
-                     for (let i in temp_data)
-                        try {
-                           temp_arr.push(JSON.parse(temp_data[i]))
-                        } catch (error) {
+            //                })
+            //          }, 500);
 
-                        }
-                     data = data.concat(temp_arr)
-                     console.log("data", data)
-                     this.setState({ api_server_load_info: data })
+            //          break;
+            //       }
+            //       let temp_arr = []
+            //       let temp_data = new TextDecoder("utf-8").decode(value).split("\n").map(data => data.replace("data:", ""))
+            //       for (let i in temp_data)
+            //          try {
+            //             temp_arr.push(JSON.parse(temp_data[i]))
+            //          } catch (error) {
 
-                  }
-               })
+            //          }
+            //       data = data.concat(temp_arr)
+            //       console.log("data", data)
+            //       this.setState({ api_server_load_info: data })
+
+            //    }
+            // })
+
+
+            console.log("-------------------------------response2", response)
+            console.log("-------------------------------response2.body", response.body)
+
+            // fetchStream(ctx.server2 + '/api/load_balancing/',{
+            //    method: 'POST',
+            //    headers: {
+            //       "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
+            //       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+            //    },
+            //    body: querystring.stringify({ url: url, test_mode: test_mode })
+            // })
+            //    .then(response => {
+            //       console.log("-------------")
+            //       console.log("Object.keys(response)",Object.keys(response))
+            //       console.log("response",response)
+            //       readAllChunks(response.body)
+            //    })
+            //    .then(chunks => console.log("chunks____",chunks))
+
+
+            // function readAllChunks(readableStream) {
+            //    console.log("-------------2")
+            //    const reader = readableStream.getReader();
+            //    const chunks = [];
+
+            //    function pump() {
+            //       return reader.read().then(({ value, done }) => {
+            //          if (done) {
+            //             console.log("chunks",chunks)
+            //             return chunks;
+            //          }
+            //          chunks.push(value);
+            //          console.log("value",value)
+            //          return pump();
+            //       });
+            //    }
+
+            //    return pump();
+            // }
 
          }
 
@@ -256,7 +309,7 @@ export default class Dashboard extends React.Component {
 
             })
             .catch(function (error) {
-               // console.log(error);
+               console.log(error);
                ctx.count++;
                return null
             });
@@ -271,7 +324,7 @@ export default class Dashboard extends React.Component {
             data: querystring.stringify(data),
          })
             .then(function (response) {
-               console.log(response.data);
+               // console.log(response.data);
                ctx.count++;
                return response.data
 
