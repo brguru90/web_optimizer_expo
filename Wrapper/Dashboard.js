@@ -5,11 +5,11 @@ import { setDataToLocal } from "../Components/Action/Action"
 import Dashboard from '../Components/Dashboard/Dashboard.jsx'
 
 
-const Wrapper = () => {
+const Wrapper = (props) => {
     const data = useSelector(state => state.data)
 
     return (
-        <Dashboard redux_data={data} set_data={setDataToLocal} />
+        <Dashboard {...props} redux_data={data} set_data={setDataToLocal} />
     )
 }
 

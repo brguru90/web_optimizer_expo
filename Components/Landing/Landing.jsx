@@ -12,7 +12,8 @@ export default class Landing extends React.Component {
    state = {
 
       styles: JSON.parse(JSON.stringify(default_style)),
-      text: "before"
+      text: "before",
+      url:"http://199.34.21.253:8080/"
    }
 
    setSyncState = (states) => { new Promise((resolve) => this.setState(states, resolve)) }
@@ -37,7 +38,8 @@ export default class Landing extends React.Component {
       this.source = CancelToken.source();
       // console.log(Object.keys(this.refs.url),this.
 
-      let url=this.refs.url._lastNativeText?this.refs.url._lastNativeText:this.refs.url._getText()
+      let url=this.state.url
+      
       console.log(url)
 
       axios({
@@ -93,7 +95,9 @@ export default class Landing extends React.Component {
                autoCapitalize="none"
                defaultValue="http://199.34.21.253:8080/"
                numberOfLines={1}
-               ref="url" />
+               ref="url"
+               onChangeText={(url) => this.setState({url})}
+                />
             <View style={styles.analyse}>
                <Button onPress={this.analyse} title="Analyse" />
             </View>
