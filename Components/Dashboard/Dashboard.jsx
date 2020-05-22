@@ -69,7 +69,7 @@ export default class Dashboard extends React.Component {
 
       if (this.props.redux_data && this.props.redux_data.loaded_apis_json) {
          let urls= Object.keys(this.props.redux_data.loaded_apis_json)
-         console.log("level=4, ",this.list_json_keys(this.props.redux_data,4))
+         console.log("level=3, ",logics.list_json_keys(this.props.redux_data,3))
 
          console.log("From redux store", Object.keys(this.props.redux_data), urls)
          console.log(urls)
@@ -122,20 +122,7 @@ export default class Dashboard extends React.Component {
    }
 
 
-   list_json_keys = (data, max_level = 5, cur_level = 1, cur_key = "") => {
-      if (typeof (data) != "object")
-          return `${cur_key}==>${data}\n`
-      let keys = Object.keys(data)
-      if (cur_level < max_level && keys.length) {
-          if (cur_key != "")
-              return keys.map(key => `${this.list_json_keys(data[key],max_level,cur_level+1,`${cur_key}=>${key}`)}`).join("")
-          else
-              return keys.map(key => `${this.list_json_keys(data[key],max_level,cur_level+1,key)}`).join("\n")
-  
-  
-      } else
-          return `${cur_key}==>${keys.join(",")}\n`
-  }
+ 
 
 
 
