@@ -68,7 +68,7 @@ export default class Dashboard extends React.Component {
       // }, 1000)
 
       if (this.props.redux_data && this.props.redux_data.loaded_apis_json) {
-         console.log("From redux store", Object.keys(this.props))
+         console.log("From redux store", Object.keys(this.props),Object.keys(this.props.redux_data.loaded_apis_json))
          this.setState(this.props.redux_data.loaded_apis_json)
          this.setState({ loaded: Object.keys(this.props.redux_data.loaded_apis_json) })
       }
@@ -109,14 +109,13 @@ export default class Dashboard extends React.Component {
       let loaded_apis_json = []
       for (let key in this.state) {
          if (key.match(/^api_/) && this.state[key] && this.state[key] != null) {
-            // loaded_apis_json[key] = this.state[key]
-            loaded_apis_json.push({key:this.state[key]})
-            // console.log(key,loaded_apis_json.length)
+            loaded_apis_json[key] = this.state[key]
+            console.log(key,loaded_apis_json.length)
          }
       }
-      console.log("-----------------------",loaded_apis_json.length)
+      console.log("-----------------------",Object.keys(loaded_apis_json))
 
-      let hook = <HookWrapper data={{ loaded_apis_json: "hi" }} hooks_call={this.props.set_data} />
+      let hook = <HookWrapper data={{ loaded_apis_json: loaded_apis_json }} hooks_call={this.props.set_data} />
       this.setState({ cus_hook: hook })
 
    }

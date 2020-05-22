@@ -13,7 +13,7 @@ const setData = (data) => {
 
 
 export const setDataToLocal = (data) => {
-    console.log("redux action called", Object.keys(data),data)
+    console.log("redux action called", Object.keys(data))
     const dispatch = useDispatch()
     dispatch(setData(data))
 }
