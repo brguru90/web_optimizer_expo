@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View, Alert, StatusBar, TouchableOpacity, Animated, Dimensions, Easing, PanResponder } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, Fragment } from 'react-native';
 import default_style from "./style.js"
 import logics from "../commonLogic.js"
 import Sidebar from "../Sidebar/Sidebar.jsx";
 import menu from "../Menu/Menu.jsx";
 import axios from 'axios'
 import fetchStream from 'fetch-readablestream';
+import HookWrapper from "../HookWrapper";
 // import RNFetchBlob from 'rn-fetch-blob'
 
 
@@ -34,7 +35,8 @@ export default class Dashboard extends React.Component {
       api_ssl_validation: null,
       count: 0,
       load_balance_status: false,
-      loaded: []
+      loaded: [],
+      cus_hook: null
    }
 
 
@@ -53,6 +55,77 @@ export default class Dashboard extends React.Component {
 
    componentDidMount() {
 
+      // this.interval2 = setInterval(() => {
+      //    if (this.count > this.total) {
+      //       setTimeout(() => {
+      //          ctx.forceUpdate()
+      //       }, 1000);
+      //       console.log("Scan complete")
+      //       clearInterval(ctx.interval2)
+      //    }
+      //    console.log(this.count)
+
+      // }, 1000)
+
+      if (this.props.redux_data && this.props.redux_data.loaded_apis_json) {
+         console.log("From redux store", Object.keys(this.props))
+         this.setState(this.props.redux_data.loaded_apis_json)
+         this.setState({ loaded: Object.keys(this.props.redux_data.loaded_apis_json) })
+      }
+      else {
+         console.log("From apis", this.props.redux_data)
+         try {
+            console.log(this.props.test1)
+            console.log(this.props.screenProps)
+         } catch (error) {
+
+         }
+         this.load_data()
+      }
+
+
+
+      let temp_interval = setInterval(() => {
+         this.loaded_apis = []
+         for (let key in this.state) {
+            if (key.match(/^api_/) && this.state[key] && this.state[key] != null) {
+               this.loaded_apis.push(key)
+               // console.log(key)
+            }
+         }
+         this.setState({ loaded: this.loaded_apis })
+         if (this.loaded_apis.length > 10) {
+            clearInterval(temp_interval)
+            this.set_data_to_store()
+         }
+
+      }, 500);
+
+   }
+
+
+   set_data_to_store = () => {
+
+      let loaded_apis_json = []
+      for (let key in this.state) {
+         if (key.match(/^api_/) && this.state[key] && this.state[key] != null) {
+            // loaded_apis_json[key] = this.state[key]
+            loaded_apis_json.push({key:this.state[key]})
+            // console.log(key,loaded_apis_json.length)
+         }
+      }
+      console.log("-----------------------",loaded_apis_json.length)
+
+      let hook = <HookWrapper data={{ loaded_apis_json: "hi" }} hooks_call={this.props.set_data} />
+      this.setState({ cus_hook: hook })
+
+   }
+
+
+
+
+
+   load_data = () => {
       let url = this.props.url
       let test_mode = this.test_mode
       let ctx = this
@@ -115,6 +188,10 @@ export default class Dashboard extends React.Component {
       })
 
 
+
+
+
+
       this.interval = setInterval(async () => {
          if (this.count >= 8) {
             clearInterval(ctx.interval)
@@ -123,27 +200,7 @@ export default class Dashboard extends React.Component {
             //    'start load balancing '+ctx.server2
             // )
             console.log("I got all other data,this is the Time to check server load")
-            // this.get_data("/api/load_balancing/", { url: url }).then(data => this.setState({ api_server_load_info: data }))
 
-            // const Api = axios.create({
-            //    baseURL: `${URL}`,
-            //    withCredentials: true,
-            //  });
-
-            // Api({
-            //    method: 'POST',
-            //    url:ctx.server2 + '/api/load_balancing/',
-            //    headers: {
-            //       "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
-            //       'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-            //       'Transfer-Encoding' : 'Chunked'
-            //    },
-            //    responseType: 'stream',
-            //    body: querystring.stringify({ url: url, test_mode: test_mode })
-            //  })
-            //    .then(function (response) {
-            //     console.log(" response.data", response.data)
-            //    });
             //   const response= await fetch(ctx.server2 + '/api/load_balancing/', {
             // method: 'POST',
             // headers: {
@@ -227,45 +284,6 @@ export default class Dashboard extends React.Component {
             // })
 
 
-            // console.log("-------------------------------response2", response)
-            // console.log("-------------------------------response2.body", response.body)
-
-            // fetchStream(ctx.server2 + '/api/load_balancing/',{
-            // method: 'POST',
-            // headers: {
-            //    "User-Agent"   : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36",
-            //    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-            // },
-            // body: querystring.stringify({ url: url, test_mode: test_mode })
-            // })
-            //    .then(response => {
-            //       console.log("-------------")
-            //       console.log("Object.keys(response)",Object.keys(response))
-            //       console.log("response",response)
-            //       readAllChunks(response.body)
-            //    })
-            //    .then(chunks => console.log("chunks____",chunks))
-
-
-            // function readAllChunks(readableStream) {
-            //    console.log("-------------2")
-            //    const reader = readableStream.getReader();
-            //    const chunks = [];
-
-            //    function pump() {
-            //       return reader.read().then(({ value, done }) => {
-            //          if (done) {
-            //             console.log("chunks",chunks)
-            //             return chunks;
-            //          }
-            //          chunks.push(value);
-            //          console.log("value",value)
-            //          return pump();
-            //       });
-            //    }
-
-            //    return pump();
-            // }
 
 
             let input = {
@@ -321,50 +339,9 @@ export default class Dashboard extends React.Component {
                }
             )
 
-
-
-
-
-
-
-
-
-
-
          }
 
       }, 1000)
-
-      // this.interval2 = setInterval(() => {
-      //    if (this.count > this.total) {
-      //       setTimeout(() => {
-      //          ctx.forceUpdate()
-      //       }, 1000);
-      //       console.log("Scan complete")
-      //       clearInterval(ctx.interval2)
-      //    }
-      //    console.log(this.count)
-
-      // }, 1000)
-
-
-
-
-
-      let temp_interval = setInterval(() => {
-         this.loaded_apis = []
-         for (let key in this.state) {
-            if (key != "styles" && this.state[key] && this.state[key] != null) {
-               this.loaded_apis.push(key)
-               // console.log(key)
-            }
-         }
-         this.setState({ loaded: this.loaded_apis })
-         if (this.loaded_apis.length > 12)
-            clearInterval(temp_interval)
-
-      }, 500);
-
 
 
    }
@@ -474,6 +451,8 @@ export default class Dashboard extends React.Component {
                <Text>{this.props.url}</Text>
                <Text>{this.count}</Text>
                <Text>{this.state.loaded.join("\n,")}</Text>
+               {this.state.cus_hook ? this.state.cus_hook : <Text>Hi2</Text>}
+
             </View>
          </Sidebar>
 
