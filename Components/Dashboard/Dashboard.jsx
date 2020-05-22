@@ -373,42 +373,20 @@ export default class Dashboard extends React.Component {
    Stream = (input, updateCallback, done) => {
       //last response length
       var last_response_len = 0;
-      //Create XHR object
       var xhttp = new XMLHttpRequest();
-      //Add eventlistener
       xhttp.onprogress = function () {
          //Get new part of response
          var responseText = xhttp.response.substr(last_response_len);
          //Set new response position
          last_response_len = xhttp.response.length;
-
          updateCallback(responseText)
-         //Split into individual events, using a safe seperator which won't naturally occur in your events
-         // responseText.split("▼")
-         //    //Only keep non-empty events to prevent JSON.parse error
-         //    .filter(function (l) { return l.length > 0; })
-         //    //Loop through events
-         //    .forEach(function (text) {
-         //       //Parse JSON to functional objects
-         //       var data = JSON.parse(text);
-         //       //Do something with each data element
-         //       for (var key in data) {
-         //          //Ignore potential prototype keys
-         //          if (data.hasOwnProperty(key)) {
-         //             //Do event handling of some sort
-         //             updateCallback(data[key], key);
-         //          }
-         //       }
-         //    });
-      };
+      }
 
       xhttp.onreadystatechange = function (aEvt) {
          if (xhttp.readyState == 4 && xhttp.status == 200) {
             done(xhttp.responseText)
-            //run any callback here
          }
-      };
-
+      }
 
       //Initialize request
       xhttp.open(input.method, input.url, true);
@@ -425,9 +403,6 @@ export default class Dashboard extends React.Component {
       }
       else
          xhttp.send();
-
-
-      //Send Request
    }
 
    componentWillUnmount() {
