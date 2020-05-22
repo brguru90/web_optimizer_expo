@@ -6,7 +6,7 @@ export default class Menu extends Component {
     render() {
         return (
             <View>
-                <Button onPress={() => Actions.home()} title="Home" />
+                <Button onPress={() => Actions.pop()} title="Home" />
                 <Text> Menu1 </Text>
                 <Text> Menu2 </Text>
                 <Text> Menu3 </Text>

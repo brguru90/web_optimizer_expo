@@ -209,7 +209,7 @@ export default class Sidebar extends React.Component {
                     <Animated.View style={styles.sidebar} >
                         <View style={styles.sidebar_bg}  {...this.state.panResponder_sidebar.panHandlers} >
                             <TouchableOpacity style={styles.touchableContainer} activeOpacity={1}>
-                                {this.props.menu?<this.props.menu />:<Button onPress={() => Actions.home()} title="Home" />}
+                                {this.props.menu?<this.props.menu />:<Button onPress={() => Actions.pop()} title="Home" />}
                             </TouchableOpacity>
                         </View>
 

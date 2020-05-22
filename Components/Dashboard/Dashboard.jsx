@@ -52,6 +52,7 @@ export default class Dashboard extends React.Component {
    server = this.server2
    test_mode = 1
    loaded_apis = []
+   axios_cancel_tokens = []
 
    componentDidMount() {
 
@@ -68,8 +69,8 @@ export default class Dashboard extends React.Component {
       // }, 1000)
 
       if (this.props.redux_data && this.props.redux_data.loaded_apis_json) {
-         let urls= Object.keys(this.props.redux_data.loaded_apis_json)
-         console.log("level=3, ",logics.list_json_keys(this.props.redux_data,3))
+         let urls = Object.keys(this.props.redux_data.loaded_apis_json)
+         console.log("level=3, ", logics.list_json_keys(this.props.redux_data, 3))
 
          console.log("From redux store", Object.keys(this.props.redux_data), urls)
          console.log(urls)
@@ -113,8 +114,8 @@ export default class Dashboard extends React.Component {
          }
       }
       console.log("-----------------------", Object.keys(loaded_apis_json))
-      let temp={}
-      temp[url]=loaded_apis_json
+      let temp = {}
+      temp[url] = loaded_apis_json
 
       let hook = <HookWrapper data={{ loaded_apis_json: temp }} hooks_call={this.props.set_data} />
       this.setState({ cus_hook: hook })
@@ -122,7 +123,7 @@ export default class Dashboard extends React.Component {
    }
 
 
- 
+
 
 
 
@@ -172,7 +173,9 @@ export default class Dashboard extends React.Component {
       })
 
 
-
+      var CancelToken = axios.CancelToken;
+      let source = CancelToken.source();
+      this.axios_cancel_tokens.push(source)
 
       axios({
          method: 'post',
@@ -184,6 +187,8 @@ export default class Dashboard extends React.Component {
             url: url,
             test_mode: test_mode
          }),
+         cancelToken: source.token,
+
       }).then(() => {
          this.get_data(this.server + "/api/analyse/", { url: url, test_mode: test_mode }).then(data => this.setState({ api_page_performance: data }))
          this.get_data(this.server + "/api/data_compression/", { url: url, test_mode: test_mode }).then(data => this.setState({ api_nw_data_performance_metrics: data }))
@@ -384,16 +389,28 @@ export default class Dashboard extends React.Component {
          xhttp.send();
    }
 
+   
    componentWillUnmount() {
+   
+
+      console.log('You are exiting')
+
       clearInterval(this.interval)
       clearInterval(this.interval2)
       clearInterval(this.interval3)
       clearInterval(this.interval4)
+      this.axios_cancel_tokens.map(source => source.cancel('Canceled during unmount'))
    }
 
 
    get_data = async (url, data, timeout = 300) => {
       let ctx = this;
+
+      var CancelToken = axios.CancelToken;
+      let source = CancelToken.source();
+      this.axios_cancel_tokens.push(source)
+
+
       if (timeout != null) {
          return await axios({
             method: 'post',
@@ -403,6 +420,7 @@ export default class Dashboard extends React.Component {
                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
             },
             data: querystring.stringify(data),
+            cancelToken: source.token,
          })
             .then(function (response) {
                // console.log(response.data);
@@ -424,6 +442,7 @@ export default class Dashboard extends React.Component {
                'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
             },
             data: querystring.stringify(data),
+            cancelToken: source.token,
          })
             .then(function (response) {
                // console.log(response.data);
