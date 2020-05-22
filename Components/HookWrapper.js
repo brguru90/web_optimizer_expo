@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text} from 'react-native';
+import { View} from 'react-native';
 
 
 export default HookWrapper=({ data, hooks_call })=>{
     hooks_call(data)
-    return <Text>Hi</Text>
+    return <View></View>
 }
