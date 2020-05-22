@@ -72,7 +72,6 @@ export default class Dashboard extends React.Component {
 
       this.setState({ url: this.props.url })
 
-      console.log(Object.keys(this.props.redux_data.loaded_apis_json))
 
       if (this.props.redux_data && this.props.redux_data.loaded_apis_json && this.props.redux_data.loaded_apis_json[this.props.url]) {
          console.log("level=2, ", logics.list_json_keys(this.props.redux_data, 2))
@@ -109,6 +108,7 @@ export default class Dashboard extends React.Component {
       let url = this.props.url
 
 
+
       let loaded_apis_json = []
       for (let key in this.state) {
          if (key.match(/^api_/) && this.state[key] && this.state[key] != null) {
@@ -117,7 +117,11 @@ export default class Dashboard extends React.Component {
          }
       }
       console.log("-----------------------", Object.keys(loaded_apis_json), url)
-      let temp = this.props.redux_data.loaded_apis_json
+      let temp = {}
+      if (this.props.redux_data && this.props.redux_data.loaded_apis_json && this.props.redux_data.loaded_apis_json!=null){
+         console.log(Object.keys(this.props.redux_data.loaded_apis_json))
+         temp = this.props.redux_data.loaded_apis_json
+      }
       temp[url] = loaded_apis_json
 
       let hook = <HookWrapper data={{ loaded_apis_json: temp }} hooks_call={this.props.set_data} />
