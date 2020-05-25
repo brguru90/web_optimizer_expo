@@ -37,7 +37,8 @@ export default class Dashboard extends React.Component {
       url: null,
       load_balance_status: false,
       loaded: [],
-      cus_hook: null
+      cus_hook: null,
+      menuProps:[]
    }
 
 
@@ -69,12 +70,14 @@ export default class Dashboard extends React.Component {
 
       // }, 1000)
 
+      let menuProps=this.state.menuProps
+      menuProps["url"]=this.props.url
 
-      this.setState({ url: this.props.url })
+      this.setState({ url: this.props.url, menuProps:menuProps})
 
 
       if (this.props.redux_data && this.props.redux_data.loaded_apis_json && this.props.redux_data.loaded_apis_json[this.props.url]) {
-         console.log("level=2, ", logics.list_json_keys(this.props.redux_data, 2))
+         console.log("level=3, ", logics.list_json_keys(this.props.redux_data, 3))
          this.setState(this.props.redux_data.loaded_apis_json[this.props.url])
          this.setState({ loaded: Object.keys(this.props.redux_data.loaded_apis_json[this.props.url]) })
       }
@@ -471,8 +474,8 @@ export default class Dashboard extends React.Component {
       const styles = logics.updateStyle(default_style, this.state.styles)
 
       return (
-         <Sidebar menu={menu}>
-            <StatusBar barStyle="dark-content" hidden={false} translucent={false} backgroundColor="red" />
+         <Sidebar menu={menu} menuProps={this.state.menuProps}>
+            <StatusBar barStyle="dark-content" hidden={false} translucent={false} backgroundColor="lightskyblue" />
             <View style={styles.container}>
                <Text>Open up App.js to start working on your app!</Text>
                <Text>{JSON.stringify(this.state.styles)}</Text>
