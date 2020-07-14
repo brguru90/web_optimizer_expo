@@ -45,7 +45,7 @@ export default class Dashboard extends React.Component {
    interval3 = null
    interval4 = null
    timeout = null
-   server = "http://weboptimizer.terralogic.com"
+   server = "http://weboptimizer.terralogic.com/server"
    server2 = "http://199.21.200.85"
    server = this.server2
    test_mode = 1
@@ -469,8 +469,8 @@ export default class Dashboard extends React.Component {
          <Sidebar menu={menu}>
             <StatusBar barStyle="dark-content" hidden={false} translucent={false} backgroundColor="red" />
             <View style={styles.container}>
-               <Text>Open up App.js to start working on your app!</Text>
-               <Text>{JSON.stringify(this.state.styles)}</Text>
+               <Text>Loading data....</Text>
+               {/* <Text>{JSON.stringify(this.state.styles)}</Text> */}
                <Text>{this.props.url}</Text>
                <Text>{this.count}</Text>
                <Text>{this.state.loaded.join("\n,")}</Text>

@@ -7,7 +7,8 @@ import {
 const width = Dimensions.get("window").width;
 
 export default {
- 
+
+    screenWidth:width, 
     container: {
         flex: 1,
         backgroundColor: '#fff',
@@ -37,10 +38,10 @@ export default {
     },
     sidebar: {
         position: "absolute",
-        right: width,
+        left: (width*0.8),
         top: 0,
         zIndex:100,
-        width:"80%",
+        width:width*0.8,
         height:"100%",
         backgroundColor:"pink",
     },
