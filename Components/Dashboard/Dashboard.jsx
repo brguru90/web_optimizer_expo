@@ -49,7 +49,7 @@ export default class Dashboard extends React.Component {
    interval3 = null
    interval4 = null
    timeout = null
-   server = "http://weboptimizer.terralogic.com"
+   server = "http://weboptimizer.terralogic.com/server"
    server2 = "http://199.21.200.85"
    server = this.server2
    test_mode = 1

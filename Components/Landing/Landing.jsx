@@ -44,7 +44,7 @@ export default class Landing extends React.Component {
 
       axios({
          method: 'post',
-         url: 'http://weboptimizer.terralogic.com/api/url_check/',
+         url: 'http://weboptimizer.terralogic.com/server/api/url_check/',
          headers: {
             'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
          },
